@@ -21,12 +21,10 @@ func main() {
 }
 
 func indexHandler(rw http.ResponseWriter, req *http.Request) {
-	log.Println("Index handler")
 	http.ServeFile(rw, req, "public/index.html")
 }
 
 func favIcoHandler(rw http.ResponseWriter, req *http.Request) {
-	log.Println("Fav handler")
 	http.ServeFile(rw, req, "public/favicon.ico")
 }
 
