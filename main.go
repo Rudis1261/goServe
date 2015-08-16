@@ -14,11 +14,16 @@ func main() {
 	flag.Parse()
 	requestHandlers := alice.New(loggingHandler, recoverHandler)
 	http.Handle("/", requestHandlers.ThenFunc(indexHandler))
+	http.Handle("/favicon.ico", requestHandlers.ThenFunc(favIcoHandler))
 	http.ListenAndServe(":8080", nil)
 }
 
 func indexHandler(rw http.ResponseWriter, req *http.Request) {
 	http.ServeFile(rw, req, "public/index.html")
+}
+
+func favIcoHandler(rw http.ResponseWriter, req *http.Request) {
+	http.ServeFile(rw, req, "public/favicon.ico")
 }
 
 func loggingHandler(next http.Handler) http.Handler {
