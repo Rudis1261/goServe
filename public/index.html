@@ -1,48 +1,92 @@
 <!DOCTYPE html>
-<head>
-    <style>
-        .main { 
-            margin: 100px auto;
-            max-width: 600px;
-            background: white;
-            padding: 10px;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid #c2c2c2;
-            box-shadow: 1px 1px 8px 1px #ccc;
-        }
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+        <title>The Droids you're looking for</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Missing page, you shouldn't ever see this">
+        <style>
+            html,body {
+                font-family: monospace;
+                background: #FFF0DE;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+            }
+            div.container {
+                display: block;
+                position: relative;
+                top: 10%;
+                margin-left: 0;
+                box-shadow: 0 1px 3px #525252,0 2px 8px 5px #C5C5C5;
+                border-top: 2px solid #fff;
+                border-bottom: 2px solid #fff;
+                background: #208db2;
+            }
+            div.img-holder {
+                text-align: center;
+                display: block;
+                border-right: 1px solid navy;
+                width: 300px;
+                height: 200px;
+                line-height: 200px;
+                float: left;
+                background: #fff;
+                padding: 20px;
+                height: 300px;
+                padding-right: 50px;
+            }
+            div.heading {
+                padding: 20px;
+                text-indent: 30px;
+                border-top: 1px solid navy;
+                border-bottom: 1px solid navy;
+                height: 298px;
+            }
+            h1 {
+                font-size: 50px;
+                padding: 20px 0 0 0;
+                margin: 0;
+                color: #fff;
+            }
 
-        .main h1 {
-            margin-bottom: 0px;
-        }
+            ul {
+                list-style: none;
+            }
 
-        .main small {
-            display: block;
-            margin-bottom: 20px;
-        }
+            .clearfix:after {
+                 visibility: hidden;
+                 display: block;
+                 font-size: 0;
+                 content: " ";
+                 clear: both;
+                 height: 0;
+                 }
+            .clearfix { display: inline-block; }
+            * html .clearfix { height: 1%; }
+            .clearfix { display: block; }
 
-        html,body {
-            font-family: monospace;
-            background: #e8e8e4;
-        }
-    </style>
-    <title>Serge.co.za - Under Construction</title>
-</head>
-
-<body cz-shortcut-listen="true">
-    <div class="container">
-        <div class="main">
-            <h1>Serge.co.za</h1>
-            <small>Coming Soon</small>
-            <hr />            
-            <p>
-                Thanks for stopping by, but we are still working hard to create an awesome service for you. This will take a bit of time, but it will be worth it.</p> 
-                
-                <p>Please be sure to check in every now and again. 
-            </p>
+        </style>
+    </head>
+    <body>
+        <div class="container clearfix">
+            <div class="img-holder">
+                <img
+                    src="img/docker.png"
+                    alt="docker"
+                />
+            </div>
+            <div class="heading">
+                <h1>goServe</h1>
+                <ul>
+                    <li>Written in Go</li>
+                    <li>Serving Static Content</li>
+                    <li>Running on Docker</li>
+                </ul>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
