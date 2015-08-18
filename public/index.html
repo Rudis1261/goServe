@@ -7,9 +7,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Missing page, you shouldn't ever see this">
         <style>
+            * {
+                box-sizing: border-box;
+            }
             html,body {
                 font-family: monospace;
-                background: #FFF0DE;
+                background: #EFEFEF;
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
@@ -17,44 +20,77 @@
                 padding: 0;
             }
             div.container {
+                margin: 200px auto 0;
                 display: block;
-                position: relative;
-                top: 10%;
-                margin-left: 0;
-                box-shadow: 0 1px 3px #525252,0 2px 8px 5px #C5C5C5;
-                border-top: 2px solid #fff;
-                border-bottom: 2px solid #fff;
+                width: 90%;
+                max-width: 800px;
+                -webkit-border-radius: 6px;
+                -moz-border-radius: 6px;
+                border-radius: 6px;
+                /*box-shadow: 1px -1px 3px 1px #ffffff, 1px 1px 5px 2px #0BF2FF, 2px 5px 25px #5FDADC;*/
+                box-shadow: 1px -1px 3px 1px #ffffff, 1px 3px 15px #5FDADC;
+            }
+            div.container-top,
+            div.container-bottom {
+                display: block;
+                width: 100%;
+            }
+            div.container-top {
+                border-top: 2px solid #13A3C5;
+                border-left: 2px solid #13A3C5;
+                border-right: 2px solid #13A3C5;
+                background: #fff;
+                -webkit-border-top-left-radius: 6px;
+                -webkit-border-top-right-radius: 6px;
+                -moz-border-radius-topleft: 6px;
+                -moz-border-radius-topright: 6px;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+            div.container-bottom {
+                margin: 0 auto;
                 background: #208db2;
+                -webkit-border-bottom-right-radius: 6px;
+                -webkit-border-bottom-left-radius: 6px;
+                -moz-border-radius-bottomright: 6px;
+                -moz-border-radius-bottomleft: 6px;
+                border-bottom-right-radius: 6px;
+                border-bottom-left-radius: 6px;
+            }
+            div.img-holder,
+            div.heading {
+                display: block;
             }
             div.img-holder {
+                padding: 20px 0;
                 text-align: center;
-                display: block;
-                border-right: 1px solid navy;
-                width: 300px;
-                height: 200px;
-                line-height: 200px;
-                float: left;
-                background: #fff;
-                padding: 20px;
-                height: 300px;
-                padding-right: 50px;
+                width: 350px;
             }
             div.heading {
-                padding: 20px;
-                text-indent: 30px;
-                border-top: 1px solid navy;
-                border-bottom: 1px solid navy;
-                height: 298px;
+                border-top: 2px solid #1C565F;
             }
             h1 {
                 font-size: 50px;
-                padding: 20px 0 0 0;
+                padding: 0;
                 margin: 0;
                 color: #fff;
+                font-weight: normal;
             }
 
             ul {
+                text-indent: 8px;
+                padding: 0;
+                margin: 0;
+                font-size: 18px;
                 list-style: none;
+            }
+
+            li {
+                line-height: 26px;
+            }
+
+            .padded {
+                padding: 20px;
             }
 
             .clearfix:after {
@@ -72,20 +108,26 @@
         </style>
     </head>
     <body>
-        <div class="container clearfix">
-            <div class="img-holder">
-                <img
-                    src="img/docker.png"
-                    alt="docker"
-                />
+        <div class="container">
+            <div class="container-top clearfix">
+                <div class="img-holder">
+                    <img
+                        src="img/docker.png"
+                        alt="docker"
+                    />
+                </div>
             </div>
-            <div class="heading">
-                <h1>goServe</h1>
-                <ul>
-                    <li>Written in Go</li>
-                    <li>Serving Static Content</li>
-                    <li>Running on Docker</li>
-                </ul>
+            <div class="container-bottom clearfix">
+                <div class="heading">
+                    <div class="padded">
+                        <h1>GOSERVE</h1>
+                        <ul>
+                            <li>Written in Go</li>
+                            <li>Serving Static Content</li>
+                            <li>Running on Docker</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

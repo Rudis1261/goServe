@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	//"path/filepath"
 	"time"
 )
 
@@ -34,11 +33,14 @@ func favIcoHandler(rw http.ResponseWriter, req *http.Request) {
 func imgHandler(next http.Handler) http.Handler {
 	fn := func(rw http.ResponseWriter, req *http.Request) {
 		reqUrl := req.URL.String()
-		if _, err := os.Stat(*PATH + reqUrl); os.IsNotExist(err) {
-			next.ServeHTTP(rw, req)
-		} else {
-			http.ServeFile(rw, req, *PATH+reqUrl)
+		if len(reqUrl) > 0 {
+			if _, err := os.Stat(*PATH + reqUrl); os.IsNotExist(err) {
+				next.ServeHTTP(rw, req)
+				return
+			}
 		}
+		http.ServeFile(rw, req, *PATH+reqUrl)
+		return
 	}
 
 	return http.HandlerFunc(fn)
