@@ -4,6 +4,7 @@ docker run --rm \
 -p 3000:3000 \
 -v `pwd`:/usr/src/myapp \
 -w /usr/src/myapp \
+--link mysql:mysql \
 drpain:goServe \
 go run main.go -port 3000
 

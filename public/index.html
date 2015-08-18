@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="go-serve">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="UTF-8">
         <title>The Droids you're looking for</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Missing page, you shouldn't ever see this">
+        <script
+            type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js">
+        </script>
         <style>
             * {
                 box-sizing: border-box;
@@ -106,7 +110,7 @@
 
         </style>
     </head>
-    <body>
+    <body ng-controller="mainController">
         <div class="container">
             <div class="container-top clearfix">
                 <div class="img-holder">
@@ -126,8 +130,30 @@
                             <li>Running on Docker</li>
                         </ul>
                     </div>
+                    <div class="padded">
+                        <h3>GETTING JSON <small>{{countdown}}</small></h3>
+                        <p ng-bind="output"></p>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <script type="text/javascript">
+            var app = angular.module('go-serve', []);
+            app.controller('mainController', ['$scope', '$timeout', function($scope, $timeout) {
+                $scope.seconds = 10;
+                $scope.countdown = "T-Minus "+$scope.seconds+" seconds, until AJAX";
+                $scope.onTimeout = function(){
+                    $scope.seconds--;
+                    if ($scope.seconds > 0) {
+                        $scope.countdown = "T-Minus "+$scope.seconds+" seconds, until AJAX";
+                        mytimeout = $timeout($scope.onTimeout,1000);
+                    } else {
+                        $scope.countdown = "Here we go!";
+                    }
+                }
+                var mytimeout = $timeout($scope.onTimeout,1000);
+            }]);
+        </script>
     </body>
 </html>
