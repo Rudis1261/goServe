@@ -8,16 +8,17 @@ import (
 	"time"
 )
 
-var dir = flag.String("directory", "public/", "directory of web files")
+//var dir = flag.String("directory", "public/", "directory of web files")
+var PORT = flag.String("port", "3000", "On which port the HTTP server listens")
 
 func main() {
 
 	flag.Parse()
-	log.Println("goServe Started")
+	log.Printf("goServe Started, listening on PORT: %s", *PORT)
 	requestHandlers := alice.New(loggingHandler, recoverHandler)
 	http.Handle("/", requestHandlers.ThenFunc(indexHandler))
 	http.Handle("/favicon.ico", requestHandlers.ThenFunc(favIcoHandler))
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":" + *PORT, nil)
 }
 
 func indexHandler(rw http.ResponseWriter, req *http.Request) {
