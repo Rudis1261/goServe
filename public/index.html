@@ -24,10 +24,10 @@
                 padding: 0;
             }
             div.container {
-                margin: 200px auto 0;
+                margin: 100px auto 0;
                 display: block;
                 width: 90%;
-                max-width: 800px;
+                max-width: 960px;
                 -webkit-border-radius: 6px;
                 -moz-border-radius: 6px;
                 border-radius: 6px;
@@ -39,9 +39,9 @@
                 width: 100%;
             }
             div.container-top {
-                border-top: 2px solid #13A3C5;
-                border-left: 2px solid #13A3C5;
-                border-right: 2px solid #13A3C5;
+                border-top: 1px solid #16606B;
+                border-left: 1px solid #16606B;
+                border-right: 1px solid #16606B;
                 background: #fff;
                 -webkit-border-top-left-radius: 6px;
                 -webkit-border-top-right-radius: 6px;
@@ -60,6 +60,16 @@
                 border-bottom-right-radius: 6px;
                 border-bottom-left-radius: 6px;
             }
+            div.container-show {
+                margin: 0 auto;
+                text-align: center;
+                max-height: 400px;
+                overflow-y: auto;
+                margin: 0 20px 20px 20px;
+                background: #193846;
+                border: 2px solid #fff;
+                box-shadow: inset 2px 2px 5px 0px #252525;
+            }
             div.img-holder,
             div.heading {
                 display: block;
@@ -70,7 +80,7 @@
                 width: 350px;
             }
             div.heading {
-                border-top: 2px solid #1C565F;
+                border-top: 1px solid #16606B;
             }
             h1 {
                 font-size: 50px;
@@ -92,6 +102,9 @@
                 line-height: 26px;
             }
 
+            .padded-left {
+                padding-left: 20px;
+            }
             .padded {
                 padding: 20px;
             }
@@ -107,6 +120,39 @@
             .clearfix { display: inline-block; }
             * html .clearfix { height: 1%; }
             .clearfix { display: block; }
+
+            .show-holder {
+                float: left;
+                display: block;
+                width: 20%;
+                padding: 25px 0 0;
+                text-align: center;
+            }
+
+            .show-holder img {
+                width: 140px;
+            }
+
+            .show-name {
+                display: block;
+                line-height: 16px;
+                background: #fff;
+                color: #333;
+                vertical-align: middle;
+                width: 140px;
+                height: 43px;
+                margin: 0 auto;
+                padding: 0;
+                -webkit-border-bottom-right-radius: 5px;
+                -webkit-border-bottom-left-radius: 5px;
+                -moz-border-radius-bottomright: 5px;
+                -moz-border-radius-bottomleft: 5px;
+                border-bottom-right-radius: 5px;
+                border-bottom-left-radius: 5px;
+                margin-top: -3px;
+                padding-top: 4px;
+                border-top: 3px solid #3E7DE2;
+            }
 
         </style>
     </head>
@@ -128,20 +174,40 @@
                             <li>Written in Go</li>
                             <li>Serving Static Content</li>
                             <li>Running on Docker</li>
+                            <li>Angular.JS to get JSON</li>
                         </ul>
                     </div>
-                    <div class="padded">
-                        <h3>GETTING JSON <small>{{countdown}}</small></h3>
-                        <p ng-bind="output"></p>
+                </div>
+                <div class="padded-left">
+                    <h3>GETTING JSON <small>{{countdown}}</small></h3>
+                </div>
+                <div ng-class="received ? 'container-show' : ''">
+                    <div class="padded show-holder" ng-repeat="show in shows">
+                        <div class="show-poster">
+                            <img
+                                ng-src="img/{{show.poster}}_thumb.jpg"
+                            />
+                        </div>
+                        <div class="show-name" ng-bind="decode(show.name)"></div>
                     </div>
                 </div>
+                <div class="clearfix">&nbsp;</div>
             </div>
         </div>
 
         <script type="text/javascript">
+
+            function parseHtmlEnteties(str) {
+                return str.replace(/&#([0-9]{1,3});/gi, function(match, numStr) {
+                    var num = parseInt(numStr, 10);
+                    return String.fromCharCode(num);
+                });
+            }
+
             var app = angular.module('go-serve', []);
-            app.controller('mainController', ['$scope', '$timeout', function($scope, $timeout) {
+            app.controller('mainController', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
                 $scope.seconds = 10;
+                $scope.received = false;
                 $scope.countdown = "T-Minus "+$scope.seconds+" seconds, until AJAX";
                 $scope.onTimeout = function(){
                     $scope.seconds--;
@@ -150,8 +216,19 @@
                         mytimeout = $timeout($scope.onTimeout,1000);
                     } else {
                         $scope.countdown = "Here we go!";
+                        $http.get("/data").success(function(response) {
+                            $scope.shows = response;
+                            $scope.received = true;
+                        });
                     }
                 }
+
+                $scope.decode = function($index) {
+                    var escaped = $index;
+                    escaped = parseHtmlEnteties(escaped)
+                    return escaped;
+                }
+
                 var mytimeout = $timeout($scope.onTimeout,1000);
             }]);
         </script>

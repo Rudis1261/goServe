@@ -1,40 +1,34 @@
 package main
 
 import (
+	"database/sql"
+	"encoding/json"
 	"flag"
+	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/justinas/alice"
 	"log"
 	"net/http"
 	"os"
-	"fmt"
 	"time"
-	"database/sql"
-	"encoding/json"
-	_ "github.com/go-sql-driver/mysql"
 )
 
 var PATH = flag.String("path", "public", "Public directory")
 var PORT = flag.String("port", "3000", "On which port the HTTP server listens")
-var MySQL = flag.String("dsn", "root:root@tcp(mysql:3306)/tvtracker", "MySQL host in DSN form (user:password@tcp(127.0.0.1:3306)/hello)")
-var output string
-
+var MYSQL_DSN = flag.String("dsn", "root:root@tcp(mysql:3306)/tvtracker", "MySQL host details (user:password@tcp(127.0.0.1:3306)/hello)")
+var Data string
 
 func main() {
 
 	flag.Parse()
 
 	// Prepare SQL
-	conn, err := sql.Open("mysql", *MySQL)
+	conn, err := sql.Open("mysql", *MYSQL_DSN)
 	checkErr(err)
 
 	// Get the DATA from the DB
-	data, err := getData(conn)
+	Data, err = getData(conn)
 	checkErr(err)
-
-	// Reasign the data
-	output = data
-	log.Printf("%s", output)
-	log.Printf("%s", data)
 
 	// Defer closing the SQL
 	defer conn.Close()
@@ -47,25 +41,21 @@ func main() {
 	http.ListenAndServe(":"+*PORT, nil)
 }
 
-
 func indexHandler(rw http.ResponseWriter, req *http.Request) {
 	http.ServeFile(rw, req, *PATH+"/index.html")
 }
-
 
 func favIcoHandler(rw http.ResponseWriter, req *http.Request) {
 	http.ServeFile(rw, req, *PATH+"/favicon.ico")
 }
 
-
 func dataHandler(rw http.ResponseWriter, req *http.Request) {
-	if len(output) > 0 {
-		fmt.Fprintf(rw, output)
+	if len(Data) > 0 {
+		fmt.Fprintf(rw, Data)
 		return
 	}
 	http.Error(rw, http.StatusText(404), 404)
 }
-
 
 func imgHandler(next http.Handler) http.Handler {
 	fn := func(rw http.ResponseWriter, req *http.Request) {
@@ -83,7 +73,6 @@ func imgHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-
 func loggingHandler(next http.Handler) http.Handler {
 	fn := func(rw http.ResponseWriter, req *http.Request) {
 		start := time.Now()
@@ -94,7 +83,6 @@ func loggingHandler(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(fn)
 }
-
 
 func recoverHandler(next http.Handler) http.Handler {
 	fn := func(rw http.ResponseWriter, req *http.Request) {
@@ -111,35 +99,37 @@ func recoverHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-
 // Generic Error handler
 func checkErr(err error) {
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 }
 
-
 func getData(db *sql.DB) (string, error) {
-	var (
-		id string
-		name string
-	)
-	var data [][]string
+
+	type Show struct {
+		Id     string `json:"id"`
+		Name   string `json:"name"`
+		Poster string `json:"poster"`
+	}
+
+	var id, name, poster string
+	var data []*Show
+	//var test [][]string
 
 	// Do the select and iterate through the ROWs
-	rows, err := db.Query("SELECT `id`, `seriesname` FROM tv")
+	rows, err := db.Query("SELECT `id`, `seriesname`, SUBSTRING(poster, 1, LENGTH(poster)-4) as poster FROM `tv`")
 	checkErr(err)
 
 	// Loop through each row, check for an error and handle it
 	// Otherwise append it to the array
 	for rows.Next() {
-		err := rows.Scan(&id, &name)
+		err := rows.Scan(&id, &name, &poster)
 		checkErr(err)
-		result := make([]string, 2)
-		result[0] = id
-		result[1] = name
-		data = append(data, result)
+		Shows := &Show{Id: id, Name: name, Poster: poster}
+		data = append(data, Shows)
+		//log.Printf("%s", data)
 	}
 
 	// Close the connection and defer closing
